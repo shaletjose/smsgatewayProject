@@ -1,0 +1,124 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+  	<title>Table 03</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<link rel="stylesheet" href="{% static 'table-03/css/style.css'%}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	</head>
+	<body>
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+					<h2 class="heading-section">Message</h2>
+				</div>
+			</div>
+			{% for message in messages %}
+
+				<div class="alert alert-success">
+					<a class="close" href="#" data-dismiss="alert">×</a>
+					<p> {{ message }}</p>
+
+				</div>
+			{% endfor %}
+			<form method="POST" action="" data-center-url="{% url 'smsgatewayApp:statusUpdate' %}" id="update">
+				  {%csrf_token%}
+			<div class="row">
+				<div class="col-md-12">
+					<h4 class="text-center mb-4"></h4>
+					<div class="table-wrap">
+						<table class="table">
+					    <thead class="thead-primary">
+					      <tr>
+					        <th>Phone Number</th>
+
+					        <th>Message</th>
+					        <th>Status</th>
+							  <th>Update</th>
+							    <th style="display:none;">Message Id</th>
+
+
+					      </tr>
+					    </thead>
+					    <tbody>
+
+						{% for i in smsdb %}
+					      <tr>
+
+					          <td name="phone" class="nr">{{i.phone}}</td>
+							  <td name="message1">{{i.message}}</td>
+							  <td name="status2">
+								<select name="status1" id="status1">
+									 <option value="default" disabled selected hidden>Choose Delivery status</option>
+									 <option value="sent">Sent</option>
+									 <option value="Druck">Fail</option>
+									 <option value="Zahl">Delivered</option>
+								</select>
+							  </td>
+							  <td name="button1"><a href="{% url 'smsgatewayApp:statusUpdate' %}" class="btn btn-primary grabId"  id="update1">Update</a></td>
+
+							  <td name="id1" style="display:none;">{{i.messageid}}</td>
+
+					      </tr>
+						{% endfor %}
+
+					    </tbody>
+					  </table>
+					</div>
+				</div>
+			</div>
+			</form>
+		</div>
+	</section>
+
+	<script src="{% static 'table-03/js/jquery.min.js' %}"></script>
+  <script src="{% static 'table-03/js/popper.js' %}"></script>
+  <script src="{% static 'table-03/js/bootstrap.min.js'%}"></script>
+  <script src="{% static 'table-03/js/main.js' %}"></script>
+
+	</body>
+
+<script>
+
+var a=[]
+var b
+  $(".grabId").click(function() {
+    var $row = $(this).closest("tr");    // Find the row
+    var $tds = $row.find("td");
+    $.each($tds, function() {
+    	a.push($(this).text())
+    	 });
+
+
+
+
+
+alert(a[0]);
+alert(a[1]);
+alert(a[2]);
+alert(a[4]);
+ $other_dropdown = $row.find('#status1 :selected').text();
+ b= $other_dropdown
+alert((b));
+var url = $("#update").attr("data-center-url");
+ $.ajax({
+        
+         data: {
+          url: url,
+         'updated_data': a
+
+        },
+    });
+});
+
+</script>
+</html>
+
